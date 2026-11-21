@@ -13,6 +13,8 @@ Build: 21 November 2026 · ESP32 core 3.3.12 · board ESP32 Dev Module, partisi 
 - [Wiring](#wiring)
 - [Flash firmware](#flash-firmware)
 - [Cara penggunaan](#cara-penggunaan)
+  - [Ganti PIN Bluetooth](#4-ganti-pin-bluetooth)
+  - [Tes gate dan perintah `lewat`](#5-tes-gate-dan-perintah-lewat)
 - [Masalah umum](#masalah-umum)
 
 ## Cara kerja
@@ -225,15 +227,130 @@ Ketik di serial monitor atau kirim lewat Bluetooth, lalu Enter. Hasilnya tampil 
 | `info` | tampilkan setting dan status gate |
 | `3` atau `qty 3` | buka gate untuk 3 orang tanpa tiket (tanpa cek server, tanpa foto) |
 | `scan <kode>` | simulasi scan QR (lewat server dan capture, sama seperti reader) |
-| `lewat` | tes hitung 1 orang lewat tanpa sensor (tanpa foto). Ditolak selama sensor terhalang |
+| `lewat` | tes hitung 1 orang lewat tanpa sensor (tanpa foto). Ditolak selama sensor terhalang. Lihat [Tes gate](#5-tes-gate-dan-perintah-lewat) |
 | `ssid <nama>` | ganti nama WiFi, lalu `restart` |
 | `pass <password>` | ganti password WiFi, lalu `restart` |
 | `domain <alamat>` | ganti server, langsung berlaku |
 | `apikey <key>` | ganti API key, langsung berlaku. `apikey hapus` untuk mengosongkan. |
-| `pin <4-16 angka>` | ganti PIN Bluetooth (lewat USB atau Bluetooth), lalu `restart`. Semua HP harus pairing ulang dengan PIN baru. |
+| `pin <4-16 angka>` | ganti PIN Bluetooth (lewat USB atau Bluetooth), lalu `restart`. Semua HP harus pairing ulang dengan PIN baru. Lihat [Ganti PIN](#4-ganti-pin-bluetooth) |
 | `restart` | restart ESP |
 
-### 4. Pilihan server
+### 4. Ganti PIN Bluetooth
+
+PIN bawaan adalah `123456`. Ganti setelah pemasangan, karena siapa pun yang tahu PIN bisa membuka gate lewat Bluetooth.
+
+**Sintaks:**
+
+```
+pin <PIN baru>
+```
+
+PIN harus berupa angka, 4 sampai 16 digit. Contoh: `pin 482913`.
+
+**Langkah lewat HP (Bluetooth):**
+
+1. Sambungkan HP ke **HYBRID-TICKETING** di aplikasi terminal Bluetooth, masih dengan PIN lama.
+2. Kirim `pin 482913` (ganti dengan PIN baru Anda). Balasannya:
+
+   ```
+   BLUETOOTH: pin ***
+   OK, btpin disimpan
+   Ketik 'restart' agar PIN baru dipakai (semua HP harus pairing ulang)
+   ```
+
+3. Kirim `restart`. Bluetooth terputus dan ESP menyala ulang. Tunggu sekitar 15 detik.
+4. Di HP, buka **Pengaturan > Bluetooth**, pilih **HYBRID-TICKETING**, lalu **Lupakan** (Unpair).
+5. Pairing ulang ke HYBRID-TICKETING dengan **PIN baru**, lalu sambungkan lagi di aplikasi terminal.
+
+**Langkah lewat USB:** ketik `pin 482913` lalu `restart` di serial monitor. Setelah restart, log menampilkan:
+
+```
+BLUETOOTH: daftar HP yang sudah pairing dihapus, pairing ulang dengan PIN
+BLUETOOTH: ON
+NAME: HYBRID-TICKETING
+PIN : 482913
+```
+
+Catatan:
+
+- **PIN baru baru berlaku setelah `restart`.** Sebelum restart, PIN lama masih dipakai.
+- **PIN yang salah format ditolak.** Balasannya `PIN harus 4-16 angka, contoh: pin 482913` dan PIN lama tetap dipakai.
+- **PIN tidak pernah dikirim ke HP.** Perintah `pin` tampil sebagai `pin ***`, dan `info` lewat Bluetooth tidak menampilkan PIN.
+- **Lupa PIN:** colokkan USB, ketik `info` di serial monitor dan lihat baris `BT PIN`, atau langsung buat PIN baru lewat USB.
+- **PIN tetap tersimpan setelah update firmware.** Hanya flash `merged.bin` yang mengembalikannya ke `123456`.
+- PIN di sini adalah PIN pairing Bluetooth. Pin kabel (GPIO) relay dan sensor tetap D2 dan D15 (lihat [Wiring](#wiring)). Mengubahnya perlu firmware yang di-build ulang oleh developer.
+
+### 5. Tes gate dan perintah `lewat`
+
+Tes ini mengecek relay, sensor, dan server tanpa perlu pengunjung. Ketik perintah di serial monitor atau kirim
+lewat aplikasi terminal Bluetooth, lalu Enter. Jika perintah dikirim lewat Bluetooth, log diawali baris
+`BLUETOOTH: <perintah>`.
+
+**Sintaks `lewat`:**
+
+```
+lewat
+```
+
+- **Tanpa angka.** Satu kali `lewat` = 1 orang lewat. Untuk 3 orang, kirim `lewat` 3 kali. `lewat 3` tetap dihitung 1.
+- Hasilnya sama seperti 1 orang melewati sensor, tetapi **tanpa foto** (tidak ada capture).
+- **Hanya dihitung saat gate buka.** Saat gate tutup, balasannya `Gate tutup, tidak dihitung`.
+- **Ditolak selama sensor terhalang**, dengan balasan `Sensor sedang terhalang (ada orang), tidak dihitung`.
+  Ini mencegah orang yang sedang berdiri di sensor terhitung dua kali.
+
+**Tes 1: relay.** Ketik `1`. Relay harus berbunyi klik dan LED biru di board menyala.
+
+```
+INPUT QTY: 1
+GATE BUKA (lewat 0/1)
+```
+
+**Tes 2: hitung tanpa sensor.** Lanjutan tes 1, ketik `lewat`. Relay klik lagi dan LED biru mati.
+
+```
+SIMULASI LEWAT
+Lewat 1/1
+GATE TUTUP
+```
+
+Untuk 2 orang: ketik `2`, lalu `lewat` dua kali. Gate baru tutup setelah `Lewat 2/2`.
+
+**Tes 3: sensor.** Ketik `1`, lalu halangi sensor dengan tangan dan lepaskan.
+
+```
+INPUT QTY: 1
+GATE BUKA (lewat 0/1)
+Sensor: TERHALANG
+Sensor: NORMAL
+Lewat 1/1
+GATE TUTUP
+```
+
+Jika sensor belum terpasang, ganti dengan kabel jumper: tempelkan **D15 ke GND** sebentar (= terhalang), lalu lepas
+(= normal). Jika tidak muncul `Sensor: TERHALANG`, cek wiring PC817 (lihat [Sensor orang dengan PC817](#sensor-orang-dengan-pc817)).
+
+**Tes 4: server.** Ketik `scan <kode tiket>`, misalnya `scan 4829175036`.
+
+```
+QR: 4829175036
+GET http://gate-backup.niagait.com/api/v1/scan-qr?qr-code=4829175036
+HTTP 200: {"status":true,"msg":"Tiket valid, silakan masuk.","jum_tiket":"1"}
+GATE BUKA (lewat 0/1)
+```
+
+Lalu lewati sensor. Saat sensor terhalang harus muncul `CAPTURE 4829175036: HTTP 202` (foto diminta).
+Jika tidak ada sensor, ketik `lewat` untuk menutup gate (tanpa foto).
+
+> **Tiket yang dipakai untuk tes menjadi tervalidasi** dan tidak bisa dipakai masuk lagi (`HTTP 409`).
+> Pakai tiket khusus tes.
+
+**Tes 5: QR reader.** Scan tiket di reader. Log harus diawali `QR: <kode tiket>`, lalu sama seperti tes 4.
+Jika tidak ada log sama sekali saat scan, cek kabel D0 (hijau) ke D21 dan D1 (putih) ke D22.
+
+**Gate tertahan buka setelah tes:** ketik `info` untuk melihat sisa hitungan (`Gate    : BUKA (lewat 0/1)`), lalu
+kirim `lewat` sampai muncul `GATE TUTUP`, atau `restart`.
+
+### 6. Pilihan server
 
 | Domain | API key | Capture foto |
 |---|---|---|
@@ -242,7 +359,7 @@ Ketik di serial monitor atau kirim lewat Bluetooth, lalu Enter. Hasilnya tampil 
 
 Jika capture gagal, gate tetap buka dan tutup normal, hanya fotonya yang tidak ada.
 
-### 5. Contoh log saat dipakai
+### 7. Contoh log saat dipakai
 
 ```
 QR: 4829175036
