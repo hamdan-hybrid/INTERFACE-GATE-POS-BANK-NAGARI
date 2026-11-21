@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-14 -14 668 318" width="668" height="318" role="img" aria-label="QR reader: D0 hijau lewat 1 kilo ohm ke GPIO21, D1 putih lewat 1 kilo ohm ke GPIO22, GND ke GND ESP32 dan minus adaptor reader">
+<title>QR reader: D0 hijau lewat 1 kilo ohm ke GPIO21, D1 putih lewat 1 kilo ohm ke GPIO22, GND ke GND ESP32 dan minus adaptor reader</title>
+<style>
+:root {
+  --bg: #eef1f4; --panel: #ffffff; --panel2: #f7f9fb; --fg: #15212c; --fg-soft: #3b4956;
+  --muted: #5e6c79; --line: #d3dae1; --accent: #0f766e; --accent-soft: #dff1ef;
+  --pcb: #1e2b36; --pcb-edge: #0f171e; --pcb-fg: #e8eef3; --can: #c9ced4; --can-edge: #9aa3ac; --can-fg: #3b4652; --pad: #c9a54b;
+  --edge: #6f7d8a;
+  --w-grn: #1c9a3c; --w-wht: #ffffff; --w-gnd: #20252b; --w-red: #d22f27; --w-sig: #e09a00;
+  --w-pur: #7c3aed; --w-brn: #8b5a2b; --w-blu: #2563d6; --w-con: #8d99a5;
+  --warn-bg: #fff4dc; --warn-fg: #6b4a00; --warn-line: #f0d18a;
+  --sans: "Barlow", "Segoe UI", Helvetica, Arial, sans-serif;
+  --display: "Barlow Condensed", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "DejaVu Sans Mono", Menlo, monospace;}
+/* svg */
+svg text { font-family: var(--sans); }
+.t { fill: var(--fg); font-size: 13.5px; }
+.tb { fill: var(--fg); font-size: 15px; font-weight: 600; }
+.tm { fill: var(--muted); font-size: 12px; }
+.mono { fill: var(--fg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.blk { fill: var(--panel2); stroke: var(--fg-soft); stroke-width: 1.5; }
+.blk-soft { fill: var(--panel2); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.term { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.term-off { fill: var(--panel); stroke: var(--muted); stroke-width: 1.2; }
+.res { fill: var(--panel); stroke: var(--fg); stroke-width: 1.7; }
+.jn { fill: var(--fg); }
+.sym { fill: none; stroke: var(--fg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.symf { fill: var(--fg); }
+.ic { fill: var(--panel); stroke: var(--fg); stroke-width: 1.8; }
+.leg { stroke: var(--fg); stroke-width: 3.2; }
+.divider { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 6 5; fill: none; }
+.edge { fill: none; stroke: var(--edge); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.w { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.c-grn { stroke: var(--w-grn); } .c-wht { stroke: var(--w-wht); } .c-gnd { stroke: var(--w-gnd); } .c-red { stroke: var(--w-red); }
+.c-sig { stroke: var(--w-sig); } .c-pur { stroke: var(--w-pur); } .c-brn { stroke: var(--w-brn); } .c-blu { stroke: var(--w-blu); } .c-con { stroke: var(--w-con); }
+.f-grn { fill: var(--w-grn); } .f-wht { fill: var(--w-wht); } .f-gnd { fill: var(--w-gnd); } .f-red { fill: var(--w-red); }
+.f-sig { fill: var(--w-sig); } .f-pur { fill: var(--w-pur); } .f-brn { fill: var(--w-brn); } .f-blu { fill: var(--w-blu); }
+.pcb { fill: var(--pcb); stroke: var(--pcb-edge); stroke-width: 1.5; }
+.can { fill: var(--can); stroke: var(--can-edge); stroke-width: 1.2; }
+.can-t { fill: var(--can-fg); font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.pad { fill: var(--pad); }
+.pad-used { stroke: var(--edge); stroke-width: 2; }
+.pcb-t { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+.pcb-tu { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+.tag { fill: var(--panel); stroke-width: 2; }
+.tag.c-wht, line.c-wht { stroke: var(--edge); }
+[hidden] { display: none !important; }
+.tag-dot { stroke: var(--edge); stroke-width: 1.2; }
+.usb { fill: var(--can); stroke: var(--can-edge); }
+.btn { fill: var(--pcb-fg); opacity: .55; }
+.bgcard { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+</style>
+<rect class="bgcard" x="-13" y="-13" width="666" height="316" rx="12"/>
+
+          <defs>
+            <path id="q12v" d="M210 110 H235 V55 H260"/>
+            <path id="qgnd" d="M210 150 H480"/>
+            <path id="qgnd2" d="M355 90 V150"/>
+            <path id="qd0a" d="M210 190 H290"/><path id="qd0b" d="M336 190 H480"/>
+            <path id="qd1a" d="M210 230 H290"/><path id="qd1b" d="M336 230 H480"/>
+          </defs>
+          <rect class="blk" x="20" y="30" width="190" height="240" rx="8"/>
+          <text class="tb" x="115" y="60" text-anchor="middle">QR Reader</text>
+          <text class="tm" x="115" y="78" text-anchor="middle">output Wiegand</text>
+          <text class="mono" x="198" y="114" text-anchor="end">+12V · merah</text>
+          <text class="mono" x="198" y="154" text-anchor="end">GND · hitam</text>
+          <text class="mono" x="198" y="194" text-anchor="end">D0 · hijau</text>
+          <text class="mono" x="198" y="234" text-anchor="end">D1 · putih</text>
+
+          <rect class="blk-soft" x="260" y="20" width="190" height="70" rx="8"/>
+          <text class="t" x="355" y="45" text-anchor="middle" font-weight="600">Adaptor reader</text>
+          <text class="tm" x="355" y="63" text-anchor="middle">umumnya 12 V</text>
+          <text class="tb" x="272" y="60">+</text>
+          <text class="tb" x="364" y="86">−</text>
+
+          <rect class="blk" x="480" y="110" width="140" height="160" rx="8"/>
+          <text class="tb" x="550" y="134" text-anchor="middle">ESP32</text>
+          <text class="mono" x="492" y="154">GND</text>
+          <text class="mono" x="492" y="194">GPIO21 (D21)</text>
+          <text class="mono" x="492" y="234">GPIO22 (D22)</text>
+
+          <use href="#q12v" xlink:href="#q12v" class="edge"/><use href="#q12v" xlink:href="#q12v" class="w c-red"/>
+          <use href="#qgnd" xlink:href="#qgnd" class="edge"/><use href="#qgnd" xlink:href="#qgnd" class="w c-gnd"/>
+          <use href="#qgnd2" xlink:href="#qgnd2" class="edge"/><use href="#qgnd2" xlink:href="#qgnd2" class="w c-gnd"/>
+          <use href="#qd0a" xlink:href="#qd0a" class="edge"/><use href="#qd0a" xlink:href="#qd0a" class="w c-grn"/><use href="#qd0b" xlink:href="#qd0b" class="edge"/><use href="#qd0b" xlink:href="#qd0b" class="w c-grn"/>
+          <use href="#qd1a" xlink:href="#qd1a" class="edge"/><use href="#qd1a" xlink:href="#qd1a" class="w c-wht"/><use href="#qd1b" xlink:href="#qd1b" class="edge"/><use href="#qd1b" xlink:href="#qd1b" class="w c-wht"/>
+
+          <rect class="res" x="290" y="182" width="46" height="16" rx="2"/><text class="t" x="313" y="176" text-anchor="middle">1 kΩ</text>
+          <rect class="res" x="290" y="222" width="46" height="16" rx="2"/><text class="t" x="313" y="216" text-anchor="middle">1 kΩ</text>
+          <circle class="jn" cx="355" cy="150" r="5"/>
+          <g class="term">
+            <circle cx="210" cy="110" r="4.5"/><circle cx="210" cy="150" r="4.5"/><circle cx="210" cy="190" r="4.5"/><circle cx="210" cy="230" r="4.5"/>
+            <circle cx="260" cy="55" r="4.5"/><circle cx="355" cy="90" r="4.5"/>
+            <circle cx="480" cy="150" r="4.5"/><circle cx="480" cy="190" r="4.5"/><circle cx="480" cy="230" r="4.5"/>
+          </g>
+        </svg>

@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-14 -14 588 678" width="588" height="678" role="img" aria-label="Peta pin ESP32 DevKit 30 pin dengan pin yang dipakai: D2, D15, D21, D22, GND, VIN, 3V3">
+<title>Peta pin ESP32 DevKit 30 pin dengan pin yang dipakai: D2, D15, D21, D22, GND, VIN, 3V3</title>
+<style>
+:root {
+  --bg: #eef1f4; --panel: #ffffff; --panel2: #f7f9fb; --fg: #15212c; --fg-soft: #3b4956;
+  --muted: #5e6c79; --line: #d3dae1; --accent: #0f766e; --accent-soft: #dff1ef;
+  --pcb: #1e2b36; --pcb-edge: #0f171e; --pcb-fg: #e8eef3; --can: #c9ced4; --can-edge: #9aa3ac; --can-fg: #3b4652; --pad: #c9a54b;
+  --edge: #6f7d8a;
+  --w-grn: #1c9a3c; --w-wht: #ffffff; --w-gnd: #20252b; --w-red: #d22f27; --w-sig: #e09a00;
+  --w-pur: #7c3aed; --w-brn: #8b5a2b; --w-blu: #2563d6; --w-con: #8d99a5;
+  --warn-bg: #fff4dc; --warn-fg: #6b4a00; --warn-line: #f0d18a;
+  --sans: "Barlow", "Segoe UI", Helvetica, Arial, sans-serif;
+  --display: "Barlow Condensed", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "DejaVu Sans Mono", Menlo, monospace;}
+/* svg */
+svg text { font-family: var(--sans); }
+.t { fill: var(--fg); font-size: 13.5px; }
+.tb { fill: var(--fg); font-size: 15px; font-weight: 600; }
+.tm { fill: var(--muted); font-size: 12px; }
+.mono { fill: var(--fg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.blk { fill: var(--panel2); stroke: var(--fg-soft); stroke-width: 1.5; }
+.blk-soft { fill: var(--panel2); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.term { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.term-off { fill: var(--panel); stroke: var(--muted); stroke-width: 1.2; }
+.res { fill: var(--panel); stroke: var(--fg); stroke-width: 1.7; }
+.jn { fill: var(--fg); }
+.sym { fill: none; stroke: var(--fg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.symf { fill: var(--fg); }
+.ic { fill: var(--panel); stroke: var(--fg); stroke-width: 1.8; }
+.leg { stroke: var(--fg); stroke-width: 3.2; }
+.divider { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 6 5; fill: none; }
+.edge { fill: none; stroke: var(--edge); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.w { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.c-grn { stroke: var(--w-grn); } .c-wht { stroke: var(--w-wht); } .c-gnd { stroke: var(--w-gnd); } .c-red { stroke: var(--w-red); }
+.c-sig { stroke: var(--w-sig); } .c-pur { stroke: var(--w-pur); } .c-brn { stroke: var(--w-brn); } .c-blu { stroke: var(--w-blu); } .c-con { stroke: var(--w-con); }
+.f-grn { fill: var(--w-grn); } .f-wht { fill: var(--w-wht); } .f-gnd { fill: var(--w-gnd); } .f-red { fill: var(--w-red); }
+.f-sig { fill: var(--w-sig); } .f-pur { fill: var(--w-pur); } .f-brn { fill: var(--w-brn); } .f-blu { fill: var(--w-blu); }
+.pcb { fill: var(--pcb); stroke: var(--pcb-edge); stroke-width: 1.5; }
+.can { fill: var(--can); stroke: var(--can-edge); stroke-width: 1.2; }
+.can-t { fill: var(--can-fg); font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.pad { fill: var(--pad); }
+.pad-used { stroke: var(--edge); stroke-width: 2; }
+.pcb-t { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+.pcb-tu { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+.tag { fill: var(--panel); stroke-width: 2; }
+.tag.c-wht, line.c-wht { stroke: var(--edge); }
+[hidden] { display: none !important; }
+.tag-dot { stroke: var(--edge); stroke-width: 1.2; }
+.usb { fill: var(--can); stroke: var(--can-edge); }
+.btn { fill: var(--pcb-fg); opacity: .55; }
+.bgcard { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+</style>
+<rect class="bgcard" x="-13" y="-13" width="586" height="676" rx="12"/>
+
+<rect class="pcb" x="210" y="20" width="140" height="580" rx="10"/>
+<rect class="can" x="228" y="32" width="104" height="86" rx="4"/>
+<text class="can-t" x="280" y="80" text-anchor="middle">ESP32-WROOM</text>
+<rect class="btn" x="232" y="568" width="16" height="10" rx="2"/><rect class="btn" x="312" y="568" width="16" height="10" rx="2"/>
+<rect class="usb" x="255" y="594" width="50" height="26" rx="3"/>
+<text class="tm" x="280" y="640" text-anchor="middle">USB</text>
+<circle class="pad" cx="226" cy="130" r="5"/>
+<text class="pcb-t" x="240" y="134" text-anchor="start" opacity=".7">EN</text>
+<circle class="pad" cx="334" cy="130" r="5"/>
+<text class="pcb-t" x="320" y="134" text-anchor="end" opacity=".7">D23</text>
+<circle class="pad" cx="226" cy="160" r="5"/>
+<text class="pcb-t" x="240" y="164" text-anchor="start" opacity=".7">VP</text>
+<line class="w c-wht" x1="340" y1="160" x2="364" y2="160" style="stroke-width:3"/>
+<rect class="tag c-wht" x="364" y="148" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-wht" cx="379" cy="160" r="5"/>
+<text class="t" x="391" y="164.5" style="font-size:12.5px">QR D1 · kabel putih</text>
+<circle class="pad pad-used" cx="334" cy="160" r="7"/>
+<text class="pcb-tu" x="320" y="164" text-anchor="end">D22</text>
+<circle class="pad" cx="226" cy="190" r="5"/>
+<text class="pcb-t" x="240" y="194" text-anchor="start" opacity=".7">VN</text>
+<circle class="pad" cx="334" cy="190" r="5"/>
+<text class="pcb-t" x="320" y="194" text-anchor="end" opacity=".7">TX0</text>
+<circle class="pad" cx="226" cy="220" r="5"/>
+<text class="pcb-t" x="240" y="224" text-anchor="start" opacity=".7">D34</text>
+<circle class="pad" cx="334" cy="220" r="5"/>
+<text class="pcb-t" x="320" y="224" text-anchor="end" opacity=".7">RX0</text>
+<circle class="pad" cx="226" cy="250" r="5"/>
+<text class="pcb-t" x="240" y="254" text-anchor="start" opacity=".7">D35</text>
+<line class="w c-grn" x1="340" y1="250" x2="364" y2="250" style="stroke-width:3"/>
+<rect class="tag c-grn" x="364" y="238" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-grn" cx="379" cy="250" r="5"/>
+<text class="t" x="391" y="254.5" style="font-size:12.5px">QR D0 · kabel hijau</text>
+<circle class="pad pad-used" cx="334" cy="250" r="7"/>
+<text class="pcb-tu" x="320" y="254" text-anchor="end">D21</text>
+<circle class="pad" cx="226" cy="280" r="5"/>
+<text class="pcb-t" x="240" y="284" text-anchor="start" opacity=".7">D32</text>
+<circle class="pad" cx="334" cy="280" r="5"/>
+<text class="pcb-t" x="320" y="284" text-anchor="end" opacity=".7">D19</text>
+<circle class="pad" cx="226" cy="310" r="5"/>
+<text class="pcb-t" x="240" y="314" text-anchor="start" opacity=".7">D33</text>
+<circle class="pad" cx="334" cy="310" r="5"/>
+<text class="pcb-t" x="320" y="314" text-anchor="end" opacity=".7">D18</text>
+<circle class="pad" cx="226" cy="340" r="5"/>
+<text class="pcb-t" x="240" y="344" text-anchor="start" opacity=".7">D25</text>
+<circle class="pad" cx="334" cy="340" r="5"/>
+<text class="pcb-t" x="320" y="344" text-anchor="end" opacity=".7">D5</text>
+<circle class="pad" cx="226" cy="370" r="5"/>
+<text class="pcb-t" x="240" y="374" text-anchor="start" opacity=".7">D26</text>
+<circle class="pad" cx="334" cy="370" r="5"/>
+<text class="pcb-t" x="320" y="374" text-anchor="end" opacity=".7">TX2</text>
+<circle class="pad" cx="226" cy="400" r="5"/>
+<text class="pcb-t" x="240" y="404" text-anchor="start" opacity=".7">D27</text>
+<circle class="pad" cx="334" cy="400" r="5"/>
+<text class="pcb-t" x="320" y="404" text-anchor="end" opacity=".7">RX2</text>
+<circle class="pad" cx="226" cy="430" r="5"/>
+<text class="pcb-t" x="240" y="434" text-anchor="start" opacity=".7">D14</text>
+<circle class="pad" cx="334" cy="430" r="5"/>
+<text class="pcb-t" x="320" y="434" text-anchor="end" opacity=".7">D4</text>
+<circle class="pad" cx="226" cy="460" r="5"/>
+<text class="pcb-t" x="240" y="464" text-anchor="start" opacity=".7">D12</text>
+<line class="w c-sig" x1="340" y1="460" x2="364" y2="460" style="stroke-width:3"/>
+<rect class="tag c-sig" x="364" y="448" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-sig" cx="379" cy="460" r="5"/>
+<text class="t" x="391" y="464.5" style="font-size:12.5px">Relay IN</text>
+<circle class="pad pad-used" cx="334" cy="460" r="7"/>
+<text class="pcb-tu" x="320" y="464" text-anchor="end">D2</text>
+<circle class="pad" cx="226" cy="490" r="5"/>
+<text class="pcb-t" x="240" y="494" text-anchor="start" opacity=".7">D13</text>
+<line class="w c-pur" x1="340" y1="490" x2="364" y2="490" style="stroke-width:3"/>
+<rect class="tag c-pur" x="364" y="478" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-pur" cx="379" cy="490" r="5"/>
+<text class="t" x="391" y="494.5" style="font-size:12.5px">Sensor · PC817 pin 4</text>
+<circle class="pad pad-used" cx="334" cy="490" r="7"/>
+<text class="pcb-tu" x="320" y="494" text-anchor="end">D15</text>
+<line class="w c-gnd" x1="196" y1="520" x2="220" y2="520" style="stroke-width:3"/>
+<rect class="tag c-gnd" x="20" y="508" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-gnd" cx="35" cy="520" r="5"/>
+<text class="t" x="47" y="524.5" style="font-size:12.5px">GND relay</text>
+<circle class="pad pad-used" cx="226" cy="520" r="7"/>
+<text class="pcb-tu" x="240" y="524" text-anchor="start">GND</text>
+<line class="w c-gnd" x1="340" y1="520" x2="364" y2="520" style="stroke-width:3"/>
+<rect class="tag c-gnd" x="364" y="508" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-gnd" cx="379" cy="520" r="5"/>
+<text class="t" x="391" y="524.5" style="font-size:12.5px">GND QR + PC817 pin 3</text>
+<circle class="pad pad-used" cx="334" cy="520" r="7"/>
+<text class="pcb-tu" x="320" y="524" text-anchor="end">GND</text>
+<line class="w c-red" x1="196" y1="550" x2="220" y2="550" style="stroke-width:3"/>
+<rect class="tag c-red" x="20" y="538" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-red" cx="35" cy="550" r="5"/>
+<text class="t" x="47" y="554.5" style="font-size:12.5px">VCC relay (5V)</text>
+<circle class="pad pad-used" cx="226" cy="550" r="7"/>
+<text class="pcb-tu" x="240" y="554" text-anchor="start">VIN</text>
+<line class="w c-red" x1="340" y1="550" x2="364" y2="550" style="stroke-width:3"/>
+<rect class="tag c-red" x="364" y="538" width="176" height="24" rx="12"/>
+<circle class="tag-dot f-red" cx="379" cy="550" r="5"/>
+<text class="t" x="391" y="554.5" style="font-size:12.5px">Pull-up 10 kΩ</text>
+<circle class="pad pad-used" cx="334" cy="550" r="7"/>
+<text class="pcb-tu" x="320" y="554" text-anchor="end">3V3</text>
+</svg>

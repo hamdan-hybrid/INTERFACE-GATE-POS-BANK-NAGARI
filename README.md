@@ -35,6 +35,7 @@ difoto dengan kode tiketnya sendiri, sesuai urutan scan.
 ```
 ├── README.md
 ├── monitor.py                                  serial monitor tanpa me-reset ESP
+├── gambar/                                     diagram wiring
 └── firmware/
     ├── hybrid-gate-ticketing.ino.merged.bin    semua dalam satu file (untuk ESP baru)
     ├── hybrid-gate-ticketing.ino.bin           aplikasi
@@ -58,47 +59,70 @@ difoto dengan kode tiketnya sendiri, sesuai urutan scan.
 
 ## Wiring
 
-```
-                         ESP32 DevKit
-                    ┌──────────────────────┐
-QR reader D0 (hijau) ──[ 1kΩ ]──► GPIO21  │
-QR reader D1 (putih) ──[ 1kΩ ]──► GPIO22  │
-                                          │
-Relay IN ────────────────────────── GPIO2  │
-                                          │
-PC817 kaki 4 ──────┬─────────────── GPIO15  │
-3V3 ──[ 10kΩ ]─────┘                      │
-PC817 kaki 3 ───────────────────────── GND  │
-                                          │
-GND QR reader + relay ──────────────── GND  │   semua ground disatukan
-Relay VCC ──────────────────────── 5V/VIN  │
-                    └──────────────────────┘
+### Ringkasan pin
 
-Relay COM + NO ──► input "buka" di kontroler gate (kontak kering)
-
-Sensor coklat (+12V) ──[ 1kΩ ]──► PC817 kaki 1
-Sensor hitam (OUT) ─────────────► PC817 kaki 2
-Sensor coklat / biru ───────────► + / − adaptor 12 V (boleh sama dengan adaptor QR reader)
-```
-
-| Perangkat | Pin perangkat | ESP32 | Catatan |
+| Perangkat | Kabel / pin | ESP32 | Catatan |
 |---|---|---|---|
-| QR reader | D0 (hijau) | GPIO21 | lewat resistor 1 kΩ |
-| QR reader | D1 (putih) | GPIO22 | lewat resistor 1 kΩ |
-| QR reader | GND | GND | catu daya reader sesuai spesifikasinya, ground disatukan dengan ESP32 |
-| Relay | IN | GPIO2 | HIGH = relay ON = gate buka. LED biru board ikut nyala. GPIO2 pin boot: pakai modul relay aktif HIGH; kalau upload gagal, cabut kabel IN saat upload |
-| Relay | VCC, GND | 5V/VIN, GND | |
-| Relay | COM + NO | kontroler gate | relay ON terus selama gate buka (bukan pulsa) |
-| Sensor | coklat (+12V) | — | ke + adaptor 12 V, dan lewat resistor 1 kΩ ke PC817 kaki 1 |
-| Sensor | hitam (OUT) | — | ke PC817 kaki 2 |
-| Sensor | biru (0V) | — | ke − adaptor 12 V |
-| PC817 | kaki 4 (kolektor) | GPIO15 | resistor 10 kΩ dari GPIO15 ke 3V3 (jangan ke 5V) |
-| PC817 | kaki 3 (emitor) | GND | |
+| QR reader | D0 · hijau | **GPIO21** (D21) | lewat resistor 1 kΩ |
+| QR reader | D1 · putih | **GPIO22** (D22) | lewat resistor 1 kΩ |
+| QR reader | GND · hitam | **GND** | satukan juga dengan − adaptor reader |
+| Relay | IN | **GPIO2** (D2) | HIGH = relay ON = gate buka. LED biru di board ikut nyala. |
+| Relay | VCC | **VIN** | 5 V dari USB / VIN |
+| Relay | GND | **GND** | |
+| Relay | COM + NO | kontroler gate | input "buka" (kontak kering), ON terus selama gate buka |
+| Sensor orang | PC817 kaki 4 (kolektor) | **GPIO15** (D15) | + resistor 10 kΩ ke **3V3** |
+| Sensor orang | PC817 kaki 3 (emitor) | **GND** | |
 
-- **Logika sensor:** HIGH = kosong, LOW = terhalang (sensor NPN NO lewat PC817). Jika sensor Anda kebalikannya,
-  firmware perlu di-build ulang oleh developer.
-- **Relay wajib aktif HIGH.** Modul relay aktif LOW perlu firmware yang di-build ulang oleh developer.
-- **GPIO16 dan GPIO17 tidak dipakai lagi** (dulu untuk modul audio, sudah dihapus).
+### Posisi pin di board
+
+![Peta pin ESP32 DevKit 30 pin dan pin yang dipakai](gambar/wiring-board.svg)
+
+Board ESP32 DevKit V1 30 pin, dilihat dari atas, port USB di bawah. Board 38 pin punya urutan pin yang berbeda:
+cari tulisan D2, D15, D21, D22, GND, VIN dan 3V3 di board. Semua pin GND tersambung di dalam board, jadi boleh pakai
+yang mana saja.
+
+### QR reader
+
+![Wiring QR reader ke ESP32](gambar/wiring-qr-reader.svg)
+
+Resistor 1 kΩ dipasang seri di kabel D0 dan D1. GND reader, − adaptor reader, dan GND ESP32 harus tersambung jadi
+satu. Tanpa ground bersama, pulsa Wiegand tidak terbaca. Reader juga harus disetel ke mode output Wiegand.
+
+### Relay gate
+
+![Wiring relay ke ESP32 dan kontroler gate](gambar/wiring-relay.svg)
+
+COM dan NO relay masuk ke input "buka" kontroler gate (kontak kering, tanpa tegangan dari ESP). Relay ON terus
+selama gate buka, bukan pulsa. Modul relay harus **aktif HIGH**. Modul relay aktif LOW perlu firmware yang di-build ulang oleh developer.
+
+GPIO2 juga pin boot ESP32. Dengan modul relay aktif HIGH, upload firmware tetap normal. Jika upload gagal, cabut
+kabel IN relay selama upload.
+
+### Sensor orang dengan PC817
+
+Yang dipakai: sensor **NPN NO, 12 V DC, 3 kabel** (coklat, biru, hitam), IC **PC817**, resistor **1 kΩ** dan
+**10 kΩ**. Sensor diberi daya dari adaptor 12 V yang sama dengan QR reader.
+
+![Wiring sensor NPN lewat PC817 ke GPIO15](gambar/wiring-sensor-pc817.svg)
+
+- Coklat (+V) ke + adaptor 12 V, dan lewat resistor 1 kΩ ke kaki 1 PC817.
+- Hitam (OUT) ke kaki 2 PC817.
+- Biru (0V) ke − adaptor 12 V.
+- Kaki 4 PC817 ke GPIO15, dengan resistor 10 kΩ dari GPIO15 ke 3V3. Kaki 3 PC817 ke GND ESP32.
+
+Logika: kosong → GPIO15 **HIGH**, terhalang → LED di PC817 menyala → GPIO15 **LOW**. Ini sudah sesuai firmware.
+Jika sensor Anda kebalikannya (HIGH saat terhalang), firmware perlu di-build ulang oleh developer.
+
+### Cek sebelum dinyalakan
+
+- [ ] GND QR reader, − adaptor reader, dan GND ESP32 tersambung jadi satu.
+- [ ] Resistor 10 kΩ pull-up ke **3V3**, bukan ke VIN atau 5V. Tegangan 5V di GPIO15 bisa merusak ESP.
+- [ ] Kabel 12 V sensor (coklat dan kaki 1 PC817) tidak menyentuh pin ESP sama sekali.
+- [ ] Resistor 1 kΩ terpasang antara kabel coklat dan kaki 1 PC817. Tanpa resistor ini, LED di PC817 terbakar.
+- [ ] QR reader disetel ke mode output Wiegand dan berbunyi beep saat scan.
+- [ ] Tidak ada kabel di pin EN. Kabel yang masuk ke EN membuat ESP terus-menerus restart.
+
+GPIO16 dan GPIO17 tidak dipakai lagi (dulu untuk modul audio, sudah dihapus).
 
 ## Flash firmware
 

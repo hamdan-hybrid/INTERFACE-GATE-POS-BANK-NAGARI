@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-14 -14 708 338" width="708" height="338" role="img" aria-label="Sensor NPN lewat PC817 ke GPIO15, pull-up 10 kilo ohm ke 3V3">
+<title>Sensor NPN lewat PC817 ke GPIO15, pull-up 10 kilo ohm ke 3V3</title>
+<style>
+:root {
+  --bg: #eef1f4; --panel: #ffffff; --panel2: #f7f9fb; --fg: #15212c; --fg-soft: #3b4956;
+  --muted: #5e6c79; --line: #d3dae1; --accent: #0f766e; --accent-soft: #dff1ef;
+  --pcb: #1e2b36; --pcb-edge: #0f171e; --pcb-fg: #e8eef3; --can: #c9ced4; --can-edge: #9aa3ac; --can-fg: #3b4652; --pad: #c9a54b;
+  --edge: #6f7d8a;
+  --w-grn: #1c9a3c; --w-wht: #ffffff; --w-gnd: #20252b; --w-red: #d22f27; --w-sig: #e09a00;
+  --w-pur: #7c3aed; --w-brn: #8b5a2b; --w-blu: #2563d6; --w-con: #8d99a5;
+  --warn-bg: #fff4dc; --warn-fg: #6b4a00; --warn-line: #f0d18a;
+  --sans: "Barlow", "Segoe UI", Helvetica, Arial, sans-serif;
+  --display: "Barlow Condensed", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "DejaVu Sans Mono", Menlo, monospace;}
+/* svg */
+svg text { font-family: var(--sans); }
+.t { fill: var(--fg); font-size: 13.5px; }
+.tb { fill: var(--fg); font-size: 15px; font-weight: 600; }
+.tm { fill: var(--muted); font-size: 12px; }
+.mono { fill: var(--fg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.blk { fill: var(--panel2); stroke: var(--fg-soft); stroke-width: 1.5; }
+.blk-soft { fill: var(--panel2); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.term { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.term-off { fill: var(--panel); stroke: var(--muted); stroke-width: 1.2; }
+.res { fill: var(--panel); stroke: var(--fg); stroke-width: 1.7; }
+.jn { fill: var(--fg); }
+.sym { fill: none; stroke: var(--fg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.symf { fill: var(--fg); }
+.ic { fill: var(--panel); stroke: var(--fg); stroke-width: 1.8; }
+.leg { stroke: var(--fg); stroke-width: 3.2; }
+.divider { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 6 5; fill: none; }
+.edge { fill: none; stroke: var(--edge); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.w { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.c-grn { stroke: var(--w-grn); } .c-wht { stroke: var(--w-wht); } .c-gnd { stroke: var(--w-gnd); } .c-red { stroke: var(--w-red); }
+.c-sig { stroke: var(--w-sig); } .c-pur { stroke: var(--w-pur); } .c-brn { stroke: var(--w-brn); } .c-blu { stroke: var(--w-blu); } .c-con { stroke: var(--w-con); }
+.f-grn { fill: var(--w-grn); } .f-wht { fill: var(--w-wht); } .f-gnd { fill: var(--w-gnd); } .f-red { fill: var(--w-red); }
+.f-sig { fill: var(--w-sig); } .f-pur { fill: var(--w-pur); } .f-brn { fill: var(--w-brn); } .f-blu { fill: var(--w-blu); }
+.pcb { fill: var(--pcb); stroke: var(--pcb-edge); stroke-width: 1.5; }
+.can { fill: var(--can); stroke: var(--can-edge); stroke-width: 1.2; }
+.can-t { fill: var(--can-fg); font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.pad { fill: var(--pad); }
+.pad-used { stroke: var(--edge); stroke-width: 2; }
+.pcb-t { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+.pcb-tu { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+.tag { fill: var(--panel); stroke-width: 2; }
+.tag.c-wht, line.c-wht { stroke: var(--edge); }
+[hidden] { display: none !important; }
+.tag-dot { stroke: var(--edge); stroke-width: 1.2; }
+.usb { fill: var(--can); stroke: var(--can-edge); }
+.btn { fill: var(--pcb-fg); opacity: .55; }
+.bgcard { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+</style>
+<rect class="bgcard" x="-13" y="-13" width="706" height="336" rx="12"/>
+
+<rect class="blk" x="10" y="70" width="150" height="170" rx="8"/>
+<text class="tb" x="85" y="96" text-anchor="middle">Sensor orang</text>
+<text class="tm" x="85" y="114" text-anchor="middle">output NPN</text>
+<text class="mono" x="148" y="144" text-anchor="end">+V · coklat</text>
+<text class="mono" x="148" y="179" text-anchor="end">OUT · hitam</text>
+<text class="mono" x="148" y="214" text-anchor="end">0V · biru</text>
+<rect class="blk" x="585" y="35" width="85" height="180" rx="8"/>
+<text class="tb" x="627" y="58" text-anchor="middle">ESP32</text>
+<text class="mono" x="597" y="89">3V3</text>
+<text class="mono" x="597" y="144">GPIO15</text>
+<text class="mono" x="597" y="179">GND</text>
+<path class="divider" d="M412 20 V104 M412 211 V282"/>
+<text class="tm" x="402" y="298" text-anchor="end">sisi sensor (12 V)</text>
+<text class="tm" x="422" y="298">sisi ESP32 (3,3 V)</text>
+<text class="t" x="200" y="60" text-anchor="middle">ke + adaptor 12 V</text>
+<text class="t" x="200" y="277" text-anchor="middle">ke − adaptor 12 V</text>
+<defs><path id="npnpv1" d="M160 140 H262"/></defs><use href="#npnpv1" xlink:href="#npnpv1" class="edge"/><use href="#npnpv1" xlink:href="#npnpv1" class="w c-brn"/>
+<defs><path id="npnpv2" d="M308 140 H345"/></defs><use href="#npnpv2" xlink:href="#npnpv2" class="edge"/><use href="#npnpv2" xlink:href="#npnpv2" class="w c-brn"/>
+<defs><path id="npnpvf" d="M200 140 V80"/></defs><use href="#npnpvf" xlink:href="#npnpvf" class="edge"/><use href="#npnpvf" xlink:href="#npnpvf" class="w c-brn"/>
+<defs><path id="npnout" d="M160 175 H345"/></defs><use href="#npnout" xlink:href="#npnout" class="edge"/><use href="#npnout" xlink:href="#npnout" class="w c-gnd"/>
+<defs><path id="npn0v" d="M160 210 H200 V250"/></defs><use href="#npn0v" xlink:href="#npn0v" class="edge"/><use href="#npn0v" xlink:href="#npn0v" class="w c-blu"/>
+<defs><path id="npnc" d="M475 140 H585"/></defs><use href="#npnc" xlink:href="#npnc" class="edge"/><use href="#npnc" xlink:href="#npnc" class="w c-pur"/>
+<defs><path id="npnpu1" d="M540 140 V121"/></defs><use href="#npnpu1" xlink:href="#npnpu1" class="edge"/><use href="#npnpu1" xlink:href="#npnpu1" class="w c-pur"/>
+<defs><path id="npnpu2" d="M540 93 V85 H585"/></defs><use href="#npnpu2" xlink:href="#npnpu2" class="edge"/><use href="#npnpu2" xlink:href="#npnpu2" class="w c-red"/>
+<defs><path id="npne" d="M475 175 H585"/></defs><use href="#npne" xlink:href="#npne" class="edge"/><use href="#npne" xlink:href="#npne" class="w c-gnd"/>
+<rect class="res" x="262" y="132" width="46" height="16" rx="2"/>
+<text class="t" x="285" y="125" text-anchor="middle">1 kΩ</text>
+<rect class="res" x="533" y="93" width="14" height="28" rx="2"/>
+<text class="t" x="526" y="111" text-anchor="end">10 kΩ</text>
+<path class="leg" d="M345 140 H360 M345 175 H360 M460 140 H475 M460 175 H475"/>
+<rect class="ic" x="360" y="110" width="100" height="95" rx="4"/>
+<circle class="symf" cx="370" cy="120" r="3.5"/>
+<text class="tm" x="410" y="199" text-anchor="middle" style="font-weight:600">PC817</text>
+<text class="tm" x="352" y="132" text-anchor="middle" style="font-weight:600">1</text>
+<text class="tm" x="352" y="167" text-anchor="middle" style="font-weight:600">2</text>
+<text class="tm" x="468" y="132" text-anchor="middle" style="font-weight:600">4</text>
+<text class="tm" x="468" y="167" text-anchor="middle" style="font-weight:600">3</text>
+<path class="sym" d="M360 140 H385 V147 M377 161 H393 M385 161 V175 H360"/>
+<path class="sym" d="M377 147 H393 L385 161 Z"/>
+<path class="sym" d="M396 151 H405 M396 161 H405"/>
+<path class="symf" d="M408 151 L402 148 L402 154 Z M408 161 L402 158 L402 164 Z"/>
+<path class="sym" d="M418 143 V172" style="stroke-width:2.4"/>
+<path class="sym" d="M418 149 L434 140 H460 M418 166 L434 175 H460"/>
+<path class="symf" d="M433 174.5 L425.2 174.1 L428.6 168 Z"/>
+<text class="tm" x="392" y="132" text-anchor="middle" style="font-size:10px">LED</text>
+<circle class="jn" cx="200" cy="140" r="5"/>
+<circle class="jn" cx="540" cy="140" r="5"/>
+<g class="term">
+<circle cx="160" cy="140" r="4.5"/>
+<circle cx="160" cy="175" r="4.5"/>
+<circle cx="160" cy="210" r="4.5"/>
+<circle cx="200" cy="75" r="4.5"/>
+<circle cx="200" cy="255" r="4.5"/>
+<circle cx="585" cy="85" r="4.5"/>
+<circle cx="585" cy="140" r="4.5"/>
+<circle cx="585" cy="175" r="4.5"/>
+</g>
+</svg>

@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-14 -14 668 268" width="668" height="268" role="img" aria-label="Relay: IN ke GPIO2, VCC ke VIN 5 volt, GND ke GND. COM dan NO ke input buka kontroler gate">
+<title>Relay: IN ke GPIO2, VCC ke VIN 5 volt, GND ke GND. COM dan NO ke input buka kontroler gate</title>
+<style>
+:root {
+  --bg: #eef1f4; --panel: #ffffff; --panel2: #f7f9fb; --fg: #15212c; --fg-soft: #3b4956;
+  --muted: #5e6c79; --line: #d3dae1; --accent: #0f766e; --accent-soft: #dff1ef;
+  --pcb: #1e2b36; --pcb-edge: #0f171e; --pcb-fg: #e8eef3; --can: #c9ced4; --can-edge: #9aa3ac; --can-fg: #3b4652; --pad: #c9a54b;
+  --edge: #6f7d8a;
+  --w-grn: #1c9a3c; --w-wht: #ffffff; --w-gnd: #20252b; --w-red: #d22f27; --w-sig: #e09a00;
+  --w-pur: #7c3aed; --w-brn: #8b5a2b; --w-blu: #2563d6; --w-con: #8d99a5;
+  --warn-bg: #fff4dc; --warn-fg: #6b4a00; --warn-line: #f0d18a;
+  --sans: "Barlow", "Segoe UI", Helvetica, Arial, sans-serif;
+  --display: "Barlow Condensed", "Segoe UI", Arial, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "DejaVu Sans Mono", Menlo, monospace;}
+/* svg */
+svg text { font-family: var(--sans); }
+.t { fill: var(--fg); font-size: 13.5px; }
+.tb { fill: var(--fg); font-size: 15px; font-weight: 600; }
+.tm { fill: var(--muted); font-size: 12px; }
+.mono { fill: var(--fg); font-family: var(--mono); font-size: 12.5px; font-weight: 500; }
+.blk { fill: var(--panel2); stroke: var(--fg-soft); stroke-width: 1.5; }
+.blk-soft { fill: var(--panel2); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+.term { fill: var(--panel); stroke: var(--fg); stroke-width: 1.6; }
+.term-off { fill: var(--panel); stroke: var(--muted); stroke-width: 1.2; }
+.res { fill: var(--panel); stroke: var(--fg); stroke-width: 1.7; }
+.jn { fill: var(--fg); }
+.sym { fill: none; stroke: var(--fg); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.symf { fill: var(--fg); }
+.ic { fill: var(--panel); stroke: var(--fg); stroke-width: 1.8; }
+.leg { stroke: var(--fg); stroke-width: 3.2; }
+.divider { stroke: var(--muted); stroke-width: 1.3; stroke-dasharray: 6 5; fill: none; }
+.edge { fill: none; stroke: var(--edge); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.w { fill: none; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.c-grn { stroke: var(--w-grn); } .c-wht { stroke: var(--w-wht); } .c-gnd { stroke: var(--w-gnd); } .c-red { stroke: var(--w-red); }
+.c-sig { stroke: var(--w-sig); } .c-pur { stroke: var(--w-pur); } .c-brn { stroke: var(--w-brn); } .c-blu { stroke: var(--w-blu); } .c-con { stroke: var(--w-con); }
+.f-grn { fill: var(--w-grn); } .f-wht { fill: var(--w-wht); } .f-gnd { fill: var(--w-gnd); } .f-red { fill: var(--w-red); }
+.f-sig { fill: var(--w-sig); } .f-pur { fill: var(--w-pur); } .f-brn { fill: var(--w-brn); } .f-blu { fill: var(--w-blu); }
+.pcb { fill: var(--pcb); stroke: var(--pcb-edge); stroke-width: 1.5; }
+.can { fill: var(--can); stroke: var(--can-edge); stroke-width: 1.2; }
+.can-t { fill: var(--can-fg); font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.pad { fill: var(--pad); }
+.pad-used { stroke: var(--edge); stroke-width: 2; }
+.pcb-t { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 500; }
+.pcb-tu { fill: var(--pcb-fg); font-family: var(--mono); font-size: 11.5px; font-weight: 700; }
+.tag { fill: var(--panel); stroke-width: 2; }
+.tag.c-wht, line.c-wht { stroke: var(--edge); }
+[hidden] { display: none !important; }
+.tag-dot { stroke: var(--edge); stroke-width: 1.2; }
+.usb { fill: var(--can); stroke: var(--can-edge); }
+.btn { fill: var(--pcb-fg); opacity: .55; }
+.bgcard { fill: var(--panel); stroke: var(--line); stroke-width: 1.5; }
+</style>
+<rect class="bgcard" x="-13" y="-13" width="666" height="266" rx="12"/>
+
+          <defs>
+            <path id="rcom" d="M140 125 H220"/><path id="rno" d="M140 160 H220"/>
+            <path id="rvcc" d="M420 110 H500"/><path id="rgnd" d="M420 150 H500"/><path id="rin" d="M420 190 H500"/>
+          </defs>
+          <rect class="blk" x="10" y="50" width="130" height="150" rx="8"/>
+          <text class="tb" x="75" y="80" text-anchor="middle">Kontroler</text>
+          <text class="tb" x="75" y="98" text-anchor="middle">gate</text>
+          <text class="tm" x="75" y="146" text-anchor="middle">input buka</text>
+
+          <rect class="blk" x="220" y="30" width="200" height="190" rx="8"/>
+          <text class="tb" x="320" y="56" text-anchor="middle">Modul relay 1 ch</text>
+          <text class="tm" x="320" y="74" text-anchor="middle">input aktif HIGH</text>
+          <text class="mono" x="232" y="129">COM</text>
+          <text class="mono" x="232" y="164">NO</text>
+          <text class="tm" x="232" y="199">NC (kosong)</text>
+          <text class="mono" x="408" y="114" text-anchor="end">VCC</text>
+          <text class="mono" x="408" y="154" text-anchor="end">GND</text>
+          <text class="mono" x="408" y="194" text-anchor="end">IN</text>
+
+          <rect class="blk" x="500" y="60" width="130" height="160" rx="8"/>
+          <text class="tb" x="565" y="86" text-anchor="middle">ESP32</text>
+          <text class="mono" x="512" y="114">VIN (5V)</text>
+          <text class="mono" x="512" y="154">GND</text>
+          <text class="mono" x="512" y="194">GPIO2 (D2)</text>
+
+          <use href="#rcom" xlink:href="#rcom" class="edge"/><use href="#rcom" xlink:href="#rcom" class="w c-con"/>
+          <use href="#rno" xlink:href="#rno" class="edge"/><use href="#rno" xlink:href="#rno" class="w c-con"/>
+          <use href="#rvcc" xlink:href="#rvcc" class="edge"/><use href="#rvcc" xlink:href="#rvcc" class="w c-red"/>
+          <use href="#rgnd" xlink:href="#rgnd" class="edge"/><use href="#rgnd" xlink:href="#rgnd" class="w c-gnd"/>
+          <use href="#rin" xlink:href="#rin" class="edge"/><use href="#rin" xlink:href="#rin" class="w c-sig"/>
+          <text class="tm" x="180" y="147" text-anchor="middle">kontak kering</text>
+          <g class="term">
+            <circle cx="140" cy="125" r="4.5"/><circle cx="140" cy="160" r="4.5"/>
+            <circle cx="220" cy="125" r="4.5"/><circle cx="220" cy="160" r="4.5"/>
+            <circle cx="420" cy="110" r="4.5"/><circle cx="420" cy="150" r="4.5"/><circle cx="420" cy="190" r="4.5"/>
+            <circle cx="500" cy="110" r="4.5"/><circle cx="500" cy="150" r="4.5"/><circle cx="500" cy="190" r="4.5"/>
+          </g>
+          <circle class="term-off" cx="220" cy="195" r="4.5"/>
+        </svg>
