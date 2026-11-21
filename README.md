@@ -82,7 +82,6 @@ Setting bawaan untuk ESP32 baru atau setelah `--erase`:
 | `ESP32 tidak terdeteksi` | Ganti kabel USB (harus kabel data), coba port USB lain. |
 | `Failed to connect` / `No serial data received` | Cabut kabel IN relay dari D2 selama upload (GPIO2 juga pin boot ESP32). Masih gagal: tahan tombol **BOOT** di ESP32 saat upload, lepas setelah muncul `Writing`. |
 | `This chip is ESP32-S3, not ESP32` (atau chip lain) | Board salah, firmware ini hanya untuk ESP32-WROOM-32. |
-| `upload.sh hanya untuk Linux 64-bit` | Pakai laptop / PC Linux 64-bit. |
 | `UPLOAD GAGAL` (setelah diulang otomatis di 115200) | Ganti kabel USB yang lebih pendek / bagus, colok langsung ke laptop (tanpa hub USB). |
 | Karakter aneh `����` di serial monitor sesaat setelah restart | Normal, abaikan. |
 
