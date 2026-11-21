@@ -45,10 +45,6 @@ difoto dengan kode tiketnya sendiri, sesuai urutan scan.
 
 ## Upload firmware
 
-Upload dari komputer **Linux 64-bit** (Ubuntu, Debian, Mint, dll). Tidak perlu Arduino IDE dan tidak perlu
-memasang apa pun. Yang dibutuhkan hanya kabel USB **data** (kabel yang hanya untuk charge tidak bisa dipakai).
-Windows / Mac: lihat [Upload lewat browser](#upload-lewat-browser-windows--mac).
-
 Download folder ini (`git clone`, atau **Code → Download ZIP** di GitHub lalu ekstrak). Colokkan ESP32, buka
 terminal di folder ini, lalu jalankan:
 
