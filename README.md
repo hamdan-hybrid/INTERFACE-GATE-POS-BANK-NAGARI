@@ -20,6 +20,9 @@ Build: 21 November 2026 · ESP32 core 3.3.12 · board ESP32 Dev Module, partisi 
 1. QR reader (Wiegand) membaca kode tiket.
 2. ESP mengirim `GET <domain>/api/v1/scan-qr?qr-code=<kode>` (API key di header `X-API-Key`).
    Jika server membalas `"status": true`, relay ON (gate buka) untuk `jum_tiket` orang.
+   Jika server tidak menjawab dalam 3 detik (paket hilang di jaringan), ESP langsung mengulang sekali dengan
+   `&retry=1`. Server (Gate Guard 2.0.1 ke atas) tetap menjawab valid walau permintaan pertama sudah memvalidasi tiket, jadi tiket tidak
+   hangus. Scan ulang tiket yang sama dalam 30 detik setelah gagal juga dikirim dengan `&retry=1`.
 3. Sensor menghitung orang: 1 orang = sensor terhalang lalu kembali normal.
    Saat sensor mulai terhalang, ESP mengirim `GET <domain>/api/v1/capture?qr-code=<kode tiket orang itu>`.
 4. Gate hanya tertutup (relay OFF) jika jumlah orang yang lewat sudah sama dengan jumlah tiket.
@@ -45,47 +48,57 @@ difoto dengan kode tiketnya sendiri, sesuai urutan scan.
 
 | Komponen | Keterangan |
 |---|---|
-| ESP32 DevKit (ESP32-WROOM, flash 4 MB) | |
+| ESP32 DevKit (ESP32-WROOM, flash 4 MB) | board "ESP32 Dev Module" |
 | QR reader output Wiegand | format 26 / 34 / 66 bit atau mode teks |
-| Modul relay 1 channel | **input aktif HIGH** |
-| Sensor penghitung orang (beam / IR) | **output menarik ke GND saat terhalang** |
-| 2 resistor 1 kΩ | jalur D0 dan D1 QR reader |
-| 1 dioda (mis. 1N4148 atau Schottky 1N5819) | jalur output sensor |
-
-Firmware ini mengharuskan relay aktif HIGH dan sensor LOW saat terhalang. Jika perangkat Anda kebalikannya,
-firmware perlu di-build ulang oleh developer.
+| Modul relay 1 channel | input aktif HIGH |
+| Sensor penghitung orang (beam / IR) | NPN NO, 12 V DC, 3 kabel (coklat +V, biru 0V, hitam OUT) |
+| Optocoupler PC817 | memisahkan sinyal sensor 12 V dari ESP32 |
+| 3 resistor 1 kΩ | jalur D0 dan D1 QR reader, LED PC817 |
+| 1 resistor 10 kΩ | pull-up GPIO15 ke 3V3 |
 
 ## Wiring
 
 ```
                          ESP32 DevKit
                     ┌──────────────────────┐
-QR reader D0 (hijau) ──[ 1kΩ ]──► GPIO23  │
+QR reader D0 (hijau) ──[ 1kΩ ]──► GPIO21  │
 QR reader D1 (putih) ──[ 1kΩ ]──► GPIO22  │
                                           │
-Relay IN ───────────────────────── GPIO26  │
+Relay IN ────────────────────────── GPIO2  │
                                           │
-Sensor OUT ──|◄──────────────────── GPIO27  │   dioda: garis (katoda) di sisi sensor
+PC817 kaki 4 ──────┬─────────────── GPIO15  │
+3V3 ──[ 10kΩ ]─────┘                      │
+PC817 kaki 3 ───────────────────────── GND  │
                                           │
-GND QR reader + relay + sensor ─────── GND  │   semua ground disatukan
+GND QR reader + relay ──────────────── GND  │   semua ground disatukan
 Relay VCC ──────────────────────── 5V/VIN  │
                     └──────────────────────┘
 
 Relay COM + NO ──► input "buka" di kontroler gate (kontak kering)
+
+Sensor coklat (+12V) ──[ 1kΩ ]──► PC817 kaki 1
+Sensor hitam (OUT) ─────────────► PC817 kaki 2
+Sensor coklat / biru ───────────► + / − adaptor 12 V (boleh sama dengan adaptor QR reader)
 ```
 
 | Perangkat | Pin perangkat | ESP32 | Catatan |
 |---|---|---|---|
-| QR reader | D0 (hijau) | GPIO23 | lewat resistor 1 kΩ |
+| QR reader | D0 (hijau) | GPIO21 | lewat resistor 1 kΩ |
 | QR reader | D1 (putih) | GPIO22 | lewat resistor 1 kΩ |
 | QR reader | GND | GND | catu daya reader sesuai spesifikasinya, ground disatukan dengan ESP32 |
-| Relay | IN | GPIO26 | HIGH = relay ON = gate buka |
+| Relay | IN | GPIO2 | HIGH = relay ON = gate buka. LED biru board ikut nyala. GPIO2 pin boot: pakai modul relay aktif HIGH; kalau upload gagal, cabut kabel IN saat upload |
 | Relay | VCC, GND | 5V/VIN, GND | |
 | Relay | COM + NO | kontroler gate | relay ON terus selama gate buka (bukan pulsa) |
-| Sensor | OUT | GPIO27 | lewat dioda, katoda (bergaris) ke OUT sensor. ESP memakai pull-up internal. |
-| Sensor | GND | GND | |
+| Sensor | coklat (+12V) | — | ke + adaptor 12 V, dan lewat resistor 1 kΩ ke PC817 kaki 1 |
+| Sensor | hitam (OUT) | — | ke PC817 kaki 2 |
+| Sensor | biru (0V) | — | ke − adaptor 12 V |
+| PC817 | kaki 4 (kolektor) | GPIO15 | resistor 10 kΩ dari GPIO15 ke 3V3 (jangan ke 5V) |
+| PC817 | kaki 3 (emitor) | GND | |
 
-GPIO16 dan GPIO17 tidak dipakai.
+- **Logika sensor:** HIGH = kosong, LOW = terhalang (sensor NPN NO lewat PC817). Jika sensor Anda kebalikannya,
+  firmware perlu di-build ulang oleh developer.
+- **Relay wajib aktif HIGH.** Modul relay aktif LOW perlu firmware yang di-build ulang oleh developer.
+- **GPIO16 dan GPIO17 tidak dipakai lagi** (dulu untuk modul audio, sudah dihapus).
 
 ## Flash firmware
 
@@ -100,6 +113,8 @@ Cara ini memakai `merged.bin`, jadi semua setting di ESP terhapus (lihat catatan
 ### Cara 2: esptool
 
 Pasang dengan `pip install esptool`. Di Windows, ganti `/dev/ttyUSB0` dengan port COM, misalnya `COM3`.
+Jika upload gagal dengan `No more data to read from the serial port`, ganti `--baud 921600` menjadi
+`--baud 115200` (lebih lambat tapi lebih stabil) atau ganti kabel USB.
 Untuk esptool versi 4, ganti `esptool` menjadi `esptool.py` dan `write-flash` menjadi `write_flash`.
 
 Update firmware, setting tetap tersimpan:
@@ -139,10 +154,11 @@ Cek file tidak rusak setelah download: `cd firmware && sha256sum -c SHA256SUMS`.
 
 ### 1. Lihat log
 
-Semua log hanya tampil di USB Serial (115200 baud), tidak dikirim ke Bluetooth.
+Log tampil di USB Serial (115200 baud) dan juga dikirim ke Bluetooth selama ada HP yang tersambung
+(aplikasi terminal Bluetooth, lihat bagian 2). Log saat boot, sebelum HP tersambung, hanya ada di USB Serial.
 
 ```bash
-python3 monitor.py /dev/ttyUSB0      # Linux, tidak me-reset ESP saat dibuka; ketik perintah lalu Enter
+python3 monitor.py /dev/ttyUSB0      # tidak me-reset ESP saat dibuka; ketik perintah lalu Enter
 ```
 
 Bisa juga memakai serial monitor lain (Arduino IDE, PuTTY) di 115200 baud, akhiran baris "Newline".
@@ -157,7 +173,7 @@ Saat menyala, log menampilkan nama dan PIN Bluetooth, status WiFi, setting, hasi
 3. Kirim satu baris:
 
    ```
-   NAMA_WIFI;PASSWORD_WIFI;https://gate-backup.niagait.com;API_KEY_CABANG
+   NAMA_WIFI;PASSWORD_WIFI;http://gate-backup.niagait.com;API_KEY_CABANG
    ```
 
 4. ESP membalas `OK` lalu restart dengan setting baru. Jika formatnya salah, balasannya `FORMAT ERROR`.
@@ -166,12 +182,15 @@ Catatan:
 
 - **API key:** ambil dari server pusat, menu **Cabang & API Key**. Jika bagian API key tidak ditulis
   (`NAMA_WIFI;PASSWORD_WIFI;DOMAIN`), API key yang sudah tersimpan tetap dipakai.
-- **Selalu tulis `https://` untuk server lewat internet.** Tanpa itu ESP memakai http dan API key terkirim tanpa enkripsi.
+- **Pakai `http://`, jangan `https://`.** RAM ESP32 tidak cukup untuk https selama Bluetooth aktif (sisa sekitar
+  17 KB, https butuh sekitar 40 KB), sehingga semua scan gagal dengan log `TLS error ... Memory allocation failed`.
+  Akibatnya API key terkirim tanpa enkripsi. Lebih aman memakai BackEnd Gate cabang di jaringan lokal (`http://<ip>:3000`).
 - **Password WiFi tidak boleh berisi `;`.**
 - **iPhone tidak bisa dipakai,** karena firmware memakai Bluetooth klasik (SPP).
-- **Ganti PIN bawaan `123456` setelah pemasangan** dengan perintah `pin <angka baru>` lewat USB. Siapa pun yang tahu
+- **Ganti PIN bawaan `123456` setelah pemasangan** dengan perintah `pin <angka baru>` (lewat USB atau Bluetooth). Siapa pun yang tahu
   PIN bisa membuka gate lewat Bluetooth.
-- **Setting tersimpan permanen,** tetap ada setelah ESP mati atau setelah update firmware (kecuali flash `merged.bin`).
+- **Setting tersimpan permanen** dan tetap ada setelah ESP mati atau setelah upload firmware baru (kecuali flash
+  `merged.bin`, lihat [Flash firmware](#flash-firmware)).
 
 ### 3. Perintah
 
@@ -182,18 +201,19 @@ Ketik di serial monitor atau kirim lewat Bluetooth, lalu Enter. Hasilnya tampil 
 | `info` | tampilkan setting dan status gate |
 | `3` atau `qty 3` | buka gate untuk 3 orang tanpa tiket (tanpa cek server, tanpa foto) |
 | `scan <kode>` | simulasi scan QR (lewat server dan capture, sama seperti reader) |
+| `lewat` | tes hitung 1 orang lewat tanpa sensor (tanpa foto). Ditolak selama sensor terhalang |
 | `ssid <nama>` | ganti nama WiFi, lalu `restart` |
 | `pass <password>` | ganti password WiFi, lalu `restart` |
 | `domain <alamat>` | ganti server, langsung berlaku |
 | `apikey <key>` | ganti API key, langsung berlaku. `apikey hapus` untuk mengosongkan. |
-| `pin <4-16 angka>` | ganti PIN Bluetooth, **hanya lewat USB**, lalu `restart`. Semua HP harus pairing ulang. |
+| `pin <4-16 angka>` | ganti PIN Bluetooth (lewat USB atau Bluetooth), lalu `restart`. Semua HP harus pairing ulang dengan PIN baru. |
 | `restart` | restart ESP |
 
 ### 4. Pilihan server
 
 | Domain | API key | Capture foto |
 |---|---|---|
-| Server pusat, `https://gate-backup.niagait.com` | wajib | Server pusat meneruskan ke BackEnd Gate cabang. **URL BackEnd Gate** cabang harus diisi di menu Cabang dan bisa dihubungi dari server pusat. |
+| Server pusat, `http://gate-backup.niagait.com` | wajib | Server pusat meneruskan ke BackEnd Gate cabang. **URL BackEnd Gate** cabang harus diisi di menu Cabang dan bisa dihubungi dari server pusat. |
 | BackEnd Gate cabang, `http://<ip>:3000` | tidak perlu | langsung diambil BackEnd Gate |
 
 Jika capture gagal, gate tetap buka dan tutup normal, hanya fotonya yang tidak ada.
@@ -202,11 +222,11 @@ Jika capture gagal, gate tetap buka dan tutup normal, hanya fotonya yang tidak a
 
 ```
 QR: 4829175036
-GET https://gate-backup.niagait.com/api/v1/scan-qr?qr-code=4829175036
+GET http://gate-backup.niagait.com/api/v1/scan-qr?qr-code=4829175036
 HTTP 200: {"status":true,"msg":"Tiket valid, silakan masuk.","jum_tiket":"2"}
 GATE BUKA (lewat 0/2)
 Sensor: TERHALANG
-GET https://gate-backup.niagait.com/api/v1/capture?qr-code=4829175036
+GET http://gate-backup.niagait.com/api/v1/capture?qr-code=4829175036
 CAPTURE 4829175036: HTTP 202
 Sensor: NORMAL
 Lewat 1/2
@@ -219,17 +239,19 @@ GATE TUTUP
 
 | Log / gejala | Penyebab | Solusi |
 |---|---|---|
-| `WiFi belum di-setting` | ESP baru, atau setelah flash `merged.bin` | kirim setting lewat Bluetooth |
 | `API: API key ditolak server` atau `HTTP 401` | API key kosong atau salah | kirim ulang setting lewat Bluetooth, atau `apikey <key>` |
 | `HTTP 404 ... Tiket tidak ditemukan` | tiket tidak ada, atau milik cabang lain | cek API key cabang yang dipakai |
 | `HTTP 409 ... sudah tervalidasi` | tiket sudah pernah dipakai masuk | tiket tidak bisa dipakai dua kali |
+| `TLS error -32512: SSL - Memory allocation failed` | domain memakai `https://`, RAM tidak cukup | ganti ke `http://` dengan perintah `domain` |
 | `Tidak bisa terhubung ke server (WiFi RSSI ...)` | domain salah, server mati, atau sinyal lemah | cek `info`, coba domain di browser, cek RSSI (lebih rendah dari -80 dBm berarti lemah) |
+| `WiFi belum di-setting` | ESP baru, atau setelah flash `merged.bin` | kirim setting lewat Bluetooth |
 | `WiFi putus, tiket tidak bisa dicek` | WiFi terputus atau belum di-setting | ESP mencoba konek ulang tiap 10 detik |
 | `CAPTURE ...: HTTP 503` | URL BackEnd Gate cabang belum diisi di server pusat | isi di menu Cabang |
 | `CAPTURE ...: HTTP 502` | BackEnd Gate tidak bisa dihubungi dari server pusat | cek BackEnd Gate menyala dan URL-nya benar |
 | `CAPTURE ...: HTTP 404` | tiket belum masuk ke BackEnd Gate | cek sinkron transaksi ke BackEnd Gate |
 | `Wiegand N bit: format tidak dikenal` | format output reader tidak dikenali | set reader ke Wiegand 26/34 atau mode teks |
-| Tidak ada log `Sensor:` saat dilalui, atau terbalik | wiring sensor atau dioda, atau logika sensor terbalik | cek arah dioda dan GND bersama. Logika terbalik perlu build ulang. |
+| Tidak ada log `Sensor:` saat dilalui, atau terbalik | wiring sensor / PC817, atau logika sensor terbalik | cek resistor 1 kΩ di kaki 1 PC817 dan pull-up 10 kΩ. Logika terbalik perlu build ulang. |
 | HP tidak diminta PIN atau gagal tersambung | data pairing lama masih tersimpan di HP | lupakan perangkat di HP, pairing ulang |
 | `BLUETOOTH: gagal start` | stack Bluetooth gagal menyala | `restart`. Gate tetap berjalan tanpa Bluetooth. |
 | Gate tidak menutup | jumlah yang lewat belum sama dengan jumlah tiket | tunggu sisa pengunjung, atau `restart` |
+| Upload gagal `No more data to read from the serial port` | kabel USB / port kurang stabil di kecepatan tinggi | pakai `--baud 115200` atau ganti kabel USB |
