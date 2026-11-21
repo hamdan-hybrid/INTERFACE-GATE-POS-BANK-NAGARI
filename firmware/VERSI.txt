@@ -1,0 +1,18 @@
+Firmware : hybrid-gate-ticketing
+Versi    : 1.0.0
+Build    : 2026-11-21 22:22
+Board    : ESP32 Dev Module (ESP32-WROOM-32, flash 4 MB)
+Partisi  : Huge APP (3MB APP / 1MB SPIFFS, No OTA)
+Core     : esp32 3.3.12
+
+Alamat flash:
+  0x1000   bootloader.bin
+  0x8000   partitions.bin
+  0xe000   boot_app0.bin
+  0x10000  firmware.bin
+
+SHA256:
+47bbbfca119fe87190f63a67af9d85adff6433bcf3812ec92a9b9c9416a53ad1  bootloader.bin
+aaae2888c5a6a348004b5b436f47abb25ae32e72d9003902955a998eda723edd  partitions.bin
+f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0  boot_app0.bin
+c7954227a8d9cdc4742171cf4ed78d71e307e9b6c18eba9319b6fd0b144b1769  firmware.bin

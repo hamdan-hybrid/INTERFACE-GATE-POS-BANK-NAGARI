@@ -1,17 +1,18 @@
 # Interface Gate POS - Hybrid Ticketing (ESP32)
 
-Firmware siap flash untuk ESP32 di flap gate tiket: scan QR tiket, cek ke server, buka gate, hitung orang yang
-lewat, dan minta foto (capture) untuk tiap orang.
+Firmware siap upload untuk **ESP32 DevKit (ESP32-WROOM-32)** di flap gate tiket: scan QR tiket, cek ke server,
+buka gate, hitung orang yang lewat, dan minta foto (capture) untuk tiap orang. Setting dan log lewat Bluetooth.
 
-Build: 21 November 2026 · ESP32 core 3.3.12 · board ESP32 Dev Module, partisi Huge APP, flash 4 MB.
+Versi firmware: lihat [`firmware/VERSI.txt`](firmware/VERSI.txt). Versi yang terpasang tampil di log saat boot
+(`=== HYBRID TICKETING 1.0.0 ===`) dan di perintah `info` (baris `Firmware:`).
 
 ## Daftar isi
 
 - [Cara kerja](#cara-kerja)
-- [Isi repo](#isi-repo)
+- [Isi folder](#isi-folder)
+- [Upload firmware](#upload-firmware)
 - [Komponen](#komponen)
 - [Wiring](#wiring)
-- [Flash firmware](#flash-firmware)
 - [Cara penggunaan](#cara-penggunaan)
   - [Ganti PIN Bluetooth](#4-ganti-pin-bluetooth)
   - [Tes gate dan perintah `lewat`](#5-tes-gate-dan-perintah-lewat)
@@ -32,20 +33,82 @@ Build: 21 November 2026 · ESP32 core 3.3.12 · board ESP32 Dev Module, partisi 
 Beberapa tiket bisa di-scan berturut-turut saat gate masih terbuka. Jumlahnya ditambahkan dan tiap orang
 difoto dengan kode tiketnya sendiri, sesuai urutan scan.
 
-## Isi repo
+## Isi folder
+
+| Folder / file | Isi |
+|---|---|
+| `upload.sh` | Upload firmware (Linux) |
+| `firmware/` | File firmware (`*.bin`) dan `VERSI.txt` (versi, alamat flash, SHA256) |
+| `tools/` | esptool (dipakai otomatis oleh `upload.sh`) |
+| `monitor.py` | Serial monitor tanpa me-reset ESP |
+| `gambar/` | Diagram wiring |
+
+## Upload firmware
+
+Upload dari komputer **Linux 64-bit** (Ubuntu, Debian, Mint, dll). Tidak perlu Arduino IDE dan tidak perlu
+memasang apa pun. Yang dibutuhkan hanya kabel USB **data** (kabel yang hanya untuk charge tidak bisa dipakai).
+Windows / Mac: lihat [Upload lewat browser](#upload-lewat-browser-windows--mac).
+
+Download folder ini (`git clone`, atau **Code → Download ZIP** di GitHub lalu ekstrak). Colokkan ESP32, buka
+terminal di folder ini, lalu jalankan:
 
 ```
-├── README.md
-├── monitor.py                                  serial monitor tanpa me-reset ESP
-├── gambar/                                     diagram wiring
-└── firmware/
-    ├── hybrid-gate-ticketing.ino.merged.bin    semua dalam satu file (untuk ESP baru)
-    ├── hybrid-gate-ticketing.ino.bin           aplikasi
-    ├── hybrid-gate-ticketing.ino.bootloader.bin
-    ├── hybrid-gate-ticketing.ino.partitions.bin
-    ├── boot_app0.bin
-    └── SHA256SUMS                              checksum untuk cek file tidak rusak
+bash upload.sh
 ```
+
+Tunggu sampai muncul `SELESAI`, ESP32 restart sendiri.
+Jika muncul `Tidak punya izin ke /dev/ttyUSB0`, jalankan sekali `sudo usermod -aG dialout $USER`, lalu logout dan
+login lagi.
+
+### Pilihan upload
+
+| Perintah | Kegunaan |
+|---|---|
+| `bash upload.sh` | Update firmware. WiFi, domain, API key, PIN Bluetooth, dan pairing HP **tetap**. |
+| `bash upload.sh --erase` | ESP32 **baru** / reset total. Semua setting terhapus, PIN Bluetooth kembali `123456`, pairing HP hilang. |
+| `bash upload.sh /dev/ttyUSB1` | Pilih port jika ada lebih dari satu. |
+| `BAUD=115200 bash upload.sh` | Langsung upload pelan. Biasanya tidak perlu: jika gagal, `upload.sh` otomatis mengulang di 115200. |
+
+Setting bawaan untuk ESP32 baru atau setelah `--erase`:
+
+| Setting | Bawaan |
+|---|---|
+| WiFi | kosong, wajib di-setting lewat Bluetooth (lihat [Setting lewat Bluetooth](#2-setting-lewat-bluetooth)) |
+| Domain | `http://10.10.1.104:3000` |
+| API key | kosong |
+| Nama Bluetooth | `HYBRID-TICKETING` |
+| PIN Bluetooth | `123456` |
+
+### Jika gagal
+
+| Pesan | Solusi |
+|---|---|
+| `ESP32 tidak terdeteksi` | Ganti kabel USB (harus kabel data), coba port USB lain. |
+| `Failed to connect` / `No serial data received` | Cabut kabel IN relay dari D2 selama upload (GPIO2 juga pin boot ESP32). Masih gagal: tahan tombol **BOOT** di ESP32 saat upload, lepas setelah muncul `Writing`. |
+| `This chip is ESP32-S3, not ESP32` (atau chip lain) | Board salah, firmware ini hanya untuk ESP32-WROOM-32. |
+| `upload.sh hanya untuk Linux 64-bit` | Pakai laptop / PC Linux 64-bit, atau [upload lewat browser](#upload-lewat-browser-windows--mac). |
+| `UPLOAD GAGAL` (setelah diulang otomatis di 115200) | Ganti kabel USB yang lebih pendek / bagus, colok langsung ke laptop (tanpa hub USB). |
+| Karakter aneh `����` di serial monitor sesaat setelah restart | Normal, abaikan. |
+
+### Upload lewat browser (Windows / Mac)
+
+Tanpa memasang apa pun, memakai Chrome atau Edge.
+
+1. Buka <https://espressif.github.io/esptool-js/>, colokkan ESP32 lewat USB.
+2. Klik **Connect**, pilih port ESP32.
+3. Isi alamat dan file berikut dari folder `firmware/` (klik **Add File** untuk menambah baris):
+
+   | Flash Address | File |
+   |---|---|
+   | `0x1000` | `bootloader.bin` |
+   | `0x8000` | `partitions.bin` |
+   | `0xe000` | `boot_app0.bin` |
+   | `0x10000` | `firmware.bin` |
+
+4. Klik **Program**. Setelah selesai, tekan tombol **EN** di ESP32 (atau cabut lalu colok lagi USB-nya).
+
+Setting tetap tersimpan, sama seperti `bash upload.sh`. Untuk ESP32 baru / reset total (sama seperti `--erase`),
+klik **Erase Flash** dulu sebelum **Program**.
 
 ## Komponen
 
@@ -126,56 +189,6 @@ Jika sensor Anda kebalikannya (HIGH saat terhalang), firmware perlu di-build ula
 
 GPIO16 dan GPIO17 tidak dipakai lagi (dulu untuk modul audio, sudah dihapus).
 
-## Flash firmware
-
-### Cara 1: lewat browser (tanpa install)
-
-1. Buka <https://espressif.github.io/esptool-js/> di Chrome atau Edge, colokkan ESP32 lewat USB.
-2. Klik **Connect**, pilih port ESP32.
-3. Isi **Flash Address** `0x0`, pilih file `firmware/hybrid-gate-ticketing.ino.merged.bin`, klik **Program**.
-
-Cara ini memakai `merged.bin`, jadi semua setting di ESP terhapus (lihat catatan di bawah).
-
-### Cara 2: esptool
-
-Pasang dengan `pip install esptool`. Di Windows, ganti `/dev/ttyUSB0` dengan port COM, misalnya `COM3`.
-Jika upload gagal dengan `No more data to read from the serial port`, ganti `--baud 921600` menjadi
-`--baud 115200` (lebih lambat tapi lebih stabil) atau ganti kabel USB.
-Untuk esptool versi 4, ganti `esptool` menjadi `esptool.py` dan `write-flash` menjadi `write_flash`.
-
-Update firmware, setting tetap tersimpan:
-
-```bash
-cd firmware
-esptool --chip esp32 --port /dev/ttyUSB0 --baud 921600 write-flash \
-  0x1000  hybrid-gate-ticketing.ino.bootloader.bin \
-  0x8000  hybrid-gate-ticketing.ino.partitions.bin \
-  0xe000  boot_app0.bin \
-  0x10000 hybrid-gate-ticketing.ino.bin
-```
-
-ESP baru, satu file:
-
-```bash
-cd firmware
-esptool --chip esp32 --port /dev/ttyUSB0 --baud 921600 write-flash 0x0 hybrid-gate-ticketing.ino.merged.bin
-```
-
-> `merged.bin` menimpa seluruh flash 4 MB, termasuk area setting. WiFi, domain, API key, PIN, dan daftar HP
-> yang sudah pairing kembali ke bawaan. Setelah itu kirim ulang setting lewat Bluetooth.
-
-Setting bawaan setelah flash pertama:
-
-| Setting | Bawaan |
-|---|---|
-| WiFi | kosong, wajib di-setting lewat Bluetooth |
-| Domain | `http://10.10.1.104:3000` |
-| API key | kosong |
-| Nama Bluetooth | `HYBRID-TICKETING` |
-| PIN Bluetooth | `123456` |
-
-Cek file tidak rusak setelah download: `cd firmware && sha256sum -c SHA256SUMS`.
-
 ## Cara penggunaan
 
 ### 1. Lihat log
@@ -189,7 +202,8 @@ python3 monitor.py /dev/ttyUSB0      # tidak me-reset ESP saat dibuka; ketik per
 
 Bisa juga memakai serial monitor lain (Arduino IDE, PuTTY) di 115200 baud, akhiran baris "Newline".
 
-Saat menyala, log menampilkan nama dan PIN Bluetooth, status WiFi, setting, hasil tes API, lalu `Siap scan QR`.
+Saat menyala, log menampilkan versi firmware (`=== HYBRID TICKETING 1.0.0 ===`), nama dan PIN Bluetooth, status
+WiFi, setting, hasil tes API, lalu `Siap scan QR`.
 
 ### 2. Setting lewat Bluetooth
 
@@ -215,8 +229,8 @@ Catatan:
 - **iPhone tidak bisa dipakai,** karena firmware memakai Bluetooth klasik (SPP).
 - **Ganti PIN bawaan `123456` setelah pemasangan** dengan perintah `pin <angka baru>` (lewat USB atau Bluetooth). Siapa pun yang tahu
   PIN bisa membuka gate lewat Bluetooth.
-- **Setting tersimpan permanen** dan tetap ada setelah ESP mati atau setelah upload firmware baru (kecuali flash
-  `merged.bin`, lihat [Flash firmware](#flash-firmware)).
+- **Setting tersimpan permanen** dan tetap ada setelah ESP mati atau setelah upload firmware baru (kecuali
+  `bash upload.sh --erase`, lihat [Pilihan upload](#pilihan-upload)).
 
 ### 3. Perintah
 
@@ -224,7 +238,7 @@ Ketik di serial monitor atau kirim lewat Bluetooth, lalu Enter. Hasilnya tampil 
 
 | Perintah | Fungsi |
 |---|---|
-| `info` | tampilkan setting dan status gate |
+| `info` | tampilkan versi firmware, setting, dan status gate |
 | `3` atau `qty 3` | buka gate untuk 3 orang tanpa tiket (tanpa cek server, tanpa foto) |
 | `scan <kode>` | simulasi scan QR (lewat server dan capture, sama seperti reader) |
 | `lewat` | tes hitung 1 orang lewat tanpa sensor (tanpa foto). Ditolak selama sensor terhalang. Lihat [Tes gate](#5-tes-gate-dan-perintah-lewat) |
@@ -277,7 +291,7 @@ Catatan:
 - **PIN yang salah format ditolak.** Balasannya `PIN harus 4-16 angka, contoh: pin 482913` dan PIN lama tetap dipakai.
 - **PIN tidak pernah dikirim ke HP.** Perintah `pin` tampil sebagai `pin ***`, dan `info` lewat Bluetooth tidak menampilkan PIN.
 - **Lupa PIN:** colokkan USB, ketik `info` di serial monitor dan lihat baris `BT PIN`, atau langsung buat PIN baru lewat USB.
-- **PIN tetap tersimpan setelah update firmware.** Hanya flash `merged.bin` yang mengembalikannya ke `123456`.
+- **PIN tetap tersimpan setelah update firmware.** Hanya `bash upload.sh --erase` yang mengembalikannya ke `123456`.
 - PIN di sini adalah PIN pairing Bluetooth. Pin kabel (GPIO) relay dan sensor tetap D2 dan D15 (lihat [Wiring](#wiring)). Mengubahnya perlu firmware yang di-build ulang oleh developer.
 
 ### 5. Tes gate dan perintah `lewat`
@@ -385,7 +399,7 @@ GATE TUTUP
 | `HTTP 409 ... sudah tervalidasi` | tiket sudah pernah dipakai masuk | tiket tidak bisa dipakai dua kali |
 | `TLS error -32512: SSL - Memory allocation failed` | domain memakai `https://`, RAM tidak cukup | ganti ke `http://` dengan perintah `domain` |
 | `Tidak bisa terhubung ke server (WiFi RSSI ...)` | domain salah, server mati, atau sinyal lemah | cek `info`, coba domain di browser, cek RSSI (lebih rendah dari -80 dBm berarti lemah) |
-| `WiFi belum di-setting` | ESP baru, atau setelah flash `merged.bin` | kirim setting lewat Bluetooth |
+| `WiFi belum di-setting` | ESP baru, atau setelah `upload.sh --erase` | kirim setting lewat Bluetooth |
 | `WiFi putus, tiket tidak bisa dicek` | WiFi terputus atau belum di-setting | ESP mencoba konek ulang tiap 10 detik |
 | `CAPTURE ...: HTTP 503` | URL BackEnd Gate cabang belum diisi di server pusat | isi di menu Cabang |
 | `CAPTURE ...: HTTP 502` | BackEnd Gate tidak bisa dihubungi dari server pusat | cek BackEnd Gate menyala dan URL-nya benar |
@@ -395,4 +409,3 @@ GATE TUTUP
 | HP tidak diminta PIN atau gagal tersambung | data pairing lama masih tersimpan di HP | lupakan perangkat di HP, pairing ulang |
 | `BLUETOOTH: gagal start` | stack Bluetooth gagal menyala | `restart`. Gate tetap berjalan tanpa Bluetooth. |
 | Gate tidak menutup | jumlah yang lewat belum sama dengan jumlah tiket | tunggu sisa pengunjung, atau `restart` |
-| Upload gagal `No more data to read from the serial port` | kabel USB / port kurang stabil di kecepatan tinggi | pakai `--baud 115200` atau ganti kabel USB |
