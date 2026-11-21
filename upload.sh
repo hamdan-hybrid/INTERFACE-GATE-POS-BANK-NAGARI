@@ -30,7 +30,7 @@ for f in bootloader.bin partitions.bin boot_app0.bin firmware.bin; do
 done
 
 if [ "$(uname -s)" != "Linux" ] || [ "$(uname -m)" != "x86_64" ]; then
-    echo "upload.sh hanya untuk Linux 64-bit (x86_64). Windows / Mac: lihat README, bagian Upload lewat browser."
+    echo "upload.sh hanya untuk Linux 64-bit (x86_64)."
     exit 1
 fi
 

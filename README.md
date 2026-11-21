@@ -82,29 +82,9 @@ Setting bawaan untuk ESP32 baru atau setelah `--erase`:
 | `ESP32 tidak terdeteksi` | Ganti kabel USB (harus kabel data), coba port USB lain. |
 | `Failed to connect` / `No serial data received` | Cabut kabel IN relay dari D2 selama upload (GPIO2 juga pin boot ESP32). Masih gagal: tahan tombol **BOOT** di ESP32 saat upload, lepas setelah muncul `Writing`. |
 | `This chip is ESP32-S3, not ESP32` (atau chip lain) | Board salah, firmware ini hanya untuk ESP32-WROOM-32. |
-| `upload.sh hanya untuk Linux 64-bit` | Pakai laptop / PC Linux 64-bit, atau [upload lewat browser](#upload-lewat-browser-windows--mac). |
+| `upload.sh hanya untuk Linux 64-bit` | Pakai laptop / PC Linux 64-bit. |
 | `UPLOAD GAGAL` (setelah diulang otomatis di 115200) | Ganti kabel USB yang lebih pendek / bagus, colok langsung ke laptop (tanpa hub USB). |
 | Karakter aneh `����` di serial monitor sesaat setelah restart | Normal, abaikan. |
-
-### Upload lewat browser (Windows / Mac)
-
-Tanpa memasang apa pun, memakai Chrome atau Edge.
-
-1. Buka <https://espressif.github.io/esptool-js/>, colokkan ESP32 lewat USB.
-2. Klik **Connect**, pilih port ESP32.
-3. Isi alamat dan file berikut dari folder `firmware/` (klik **Add File** untuk menambah baris):
-
-   | Flash Address | File |
-   |---|---|
-   | `0x1000` | `bootloader.bin` |
-   | `0x8000` | `partitions.bin` |
-   | `0xe000` | `boot_app0.bin` |
-   | `0x10000` | `firmware.bin` |
-
-4. Klik **Program**. Setelah selesai, tekan tombol **EN** di ESP32 (atau cabut lalu colok lagi USB-nya).
-
-Setting tetap tersimpan, sama seperti `bash upload.sh`. Untuk ESP32 baru / reset total (sama seperti `--erase`),
-klik **Erase Flash** dulu sebelum **Program**.
 
 ## Komponen
 
